@@ -1,23 +1,19 @@
 const express = require("express");
 const helmet = require("helmet");
+
+
+const usersRouter = require("./users/users-router.js");
+const authRouter = require("./auth/auth-router.js");
+const authenticator = require("./auth/authenticator.js");
+
 const server = express();
-
-const usersRouter = require('./users/users-router.js')
-const authRouter = require('./auth/auth-router.js')
-
-
 
 server.use(helmet());
 server.use(express.json());
-// endpoints
-server.use("/api/users");
-server.use("/api/auth");
 
 
+server.use("/api/users", authenticator, usersRouter);
+server.use("/api/auth", authRouter);
 
-// message so you know server is running
-server.get("/", (req, res) => {
-    res.json({ api: "It's ALIIIIVEEE it's alliiiiiveee" });
-  });
-  
-  module.exports = server;
+
+module.exports = server;
